@@ -34,7 +34,7 @@ class Thread implements Countable
         $this->uniquePosters = $uniquePosters;
 
         foreach ($threads as $thread) {
-            $this->threads[] = $thread;
+            $this->threads[] = new Threads($thread);
         }
 
     }
