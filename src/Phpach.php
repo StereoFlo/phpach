@@ -6,6 +6,7 @@ use Phpach\Boards\Category;
 use Phpach\Thread\Thread;
 use Phpach\Threards\Board;
 use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
@@ -40,7 +41,7 @@ class Phpach
      */
     public function getAllBoards(): array
     {
-        $response = $this->httpClient->request('GET', self::URL_ALL_BOARDS)->toArray();
+        $response = $this->httpClient->request(Request::METHOD_GET, self::URL_ALL_BOARDS)->toArray();
         $res = [];
         foreach ($response as $name => $threads) {
             $res[] = new Category($name, $threads);
@@ -58,7 +59,7 @@ class Phpach
      */
     public function getAllThreadsInBoard(string $boardId): Board
     {
-        $response = $this->httpClient->request('GET', sprintf(self::URL_THREADS_IN_BOARD, $boardId))->toArray();
+        $response = $this->httpClient->request(Request::METHOD_GET, sprintf(self::URL_THREADS_IN_BOARD, $boardId))->toArray();
         return new Board($response['board'], $response['threads']);
     }
 
@@ -71,7 +72,7 @@ class Phpach
      */
     public function getThread(string $boardId, int $threadId): Thread
     {
-        $response = $this->httpClient->request('GET', sprintf(self::URL_THREAD_VIEW, $boardId, $threadId))->toArray();
+        $response = $this->httpClient->request(Request::METHOD_GET, sprintf(self::URL_THREAD_VIEW, $boardId, $threadId))->toArray();
         return new Thread($response['title'], $response['posts_count'], $response['unique_posters'], $response['threads']);
     }
 }
