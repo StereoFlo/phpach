@@ -14,7 +14,7 @@ class Threads implements Countable
     public function __construct(array $posts)
     {
         foreach ($posts as $post) {
-            $this->posts = $post;
+            $this->posts = new Post($post);
         }
     }
 
