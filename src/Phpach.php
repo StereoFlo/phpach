@@ -4,7 +4,7 @@ namespace Phpach;
 
 use Phpach\Boards\Category;
 use Phpach\Thread\Thread;
-use Phpach\Threards\Board;
+use Phpach\Threads\Board;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;

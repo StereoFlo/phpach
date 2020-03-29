@@ -1,6 +1,6 @@
 <?php
 
-namespace Phpach\Threards;
+namespace Phpach\Threads;
 
 use Countable;
 
@@ -12,9 +12,9 @@ class Board implements Countable
     private $id;
 
     /**
-     * @var array
+     * @var Thread[]
      */
-    private $threads;
+    private $threads = [];
 
     public function __construct(string $id, array $threads)
     {
@@ -38,5 +38,21 @@ class Board implements Countable
     public function count(): int
     {
         return count($this->threads);
+    }
+
+    /**
+     * @return string
+     */
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return Thread[]
+     */
+    public function getThreads(): array
+    {
+        return $this->threads;
     }
 }

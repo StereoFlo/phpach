@@ -9,7 +9,7 @@ class Threads implements Countable
     /**
      * @var Post[]
      */
-    private $posts;
+    private $posts = [];
 
     public function __construct(array $posts)
     {
@@ -24,5 +24,13 @@ class Threads implements Countable
     public function count()
     {
         return count($this->posts);
+    }
+
+    /**
+     * @return Post[]
+     */
+    public function getPosts(): array
+    {
+        return $this->posts;
     }
 }

@@ -15,22 +15,22 @@ class Category implements Countable
     /**
      * @var Board[]
      */
-    private $threads;
+    private $boards = [];
 
-    public function __construct(string $name, array $threads)
+    public function __construct(string $name, array $boards)
     {
         $this->name = $name;
 
-        $this->setThreads($threads);
+        $this->setBoards($boards);
     }
 
     /**
-     * @param array $threads
+     * @param array $boards
      */
-    public function setThreads(array $threads): void
+    public function setBoards(array $boards): void
     {
-        foreach ($threads as $thread) {
-            $this->threads[] = new Board($thread);
+        foreach ($boards as $thread) {
+            $this->boards[] = new Board($thread);
         }
     }
 
@@ -39,6 +39,22 @@ class Category implements Countable
      */
     public function count(): int
     {
-        return count($this->threads);
+        return count($this->boards);
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return Board[]
+     */
+    public function getBoards(): array
+    {
+        return $this->boards;
     }
 }
