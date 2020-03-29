@@ -74,6 +74,9 @@ class Post
      */
     private $trip;
 
+    /**
+     * @var File[]|null
+     */
     private $files;
 
     public function __construct(array $post)
@@ -164,6 +167,14 @@ class Post
     public function getTrip(): ?string
     {
         return $this->trip;
+    }
+
+    /**
+     * @return File[]|null
+     */
+    public function getFiles(): ?array
+    {
+        return $this->files;
     }
 
     private function setFiles(?array $files): void
