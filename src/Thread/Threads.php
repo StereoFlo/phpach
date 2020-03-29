@@ -13,8 +13,8 @@ class Threads implements Countable
 
     public function __construct(array $posts)
     {
-        foreach ($posts as $post) {
-            $this->posts = new Post($post);
+        foreach ($posts['posts'] as $post) {
+            $this->posts[] = new Post($post);
         }
     }
 
