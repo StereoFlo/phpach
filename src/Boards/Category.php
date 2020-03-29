@@ -24,27 +24,11 @@ class Category implements Countable
         $this->setBoards($boards);
     }
 
-    /**
-     * @param array $boards
-     */
-    public function setBoards(array $boards): void
-    {
-        foreach ($boards as $thread) {
-            $this->boards[] = new Board($thread);
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function count(): int
     {
         return count($this->boards);
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
@@ -56,5 +40,12 @@ class Category implements Countable
     public function getBoards(): array
     {
         return $this->boards;
+    }
+
+    private function setBoards(array $boards): void
+    {
+        foreach ($boards as $thread) {
+            $this->boards[] = new Board($thread);
+        }
     }
 }

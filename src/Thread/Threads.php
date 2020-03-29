@@ -13,9 +13,7 @@ class Threads implements Countable
 
     public function __construct(array $posts)
     {
-        foreach ($posts['posts'] as $post) {
-            $this->posts[] = new Post($post);
-        }
+        $this->setPosts($posts['posts']);
     }
 
     /**
@@ -32,5 +30,15 @@ class Threads implements Countable
     public function getPosts(): array
     {
         return $this->posts;
+    }
+
+    /**
+     * @param array $posts
+     */
+    private function setPosts(array $posts): void
+    {
+        foreach ($posts as $post) {
+            $this->posts[] = new Post($post);
+        }
     }
 }

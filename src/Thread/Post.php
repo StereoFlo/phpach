@@ -74,6 +74,8 @@ class Post
      */
     private $trip;
 
+    private $files;
+
     public function __construct(array $post)
     {
         $this->name = $post['name'] ?? null;
@@ -91,6 +93,7 @@ class Post
         $this->tags = $post['tags'] ?? null;
         $this->timestamp = $post['timestamp'] ?? null;
         $this->trip = $post['trip'] ?? null;
+        $this->setFiles($post['files'] ?? null);
     }
 
     public function getLasthit(): ?int
@@ -161,5 +164,14 @@ class Post
     public function getTrip(): ?string
     {
         return $this->trip;
+    }
+
+    private function setFiles(?array $files): void
+    {
+        if ($files) {
+            foreach ($files as $file) {
+                $this->files[] = new File($file);
+            }
+        }
     }
 }

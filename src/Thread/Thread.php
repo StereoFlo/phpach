@@ -28,14 +28,11 @@ class Thread implements Countable
 
     public function __construct(string $title, int $postCount, int $uniquePosters, array $threads)
     {
-
-        $this->title = $title;
-        $this->postCount = $postCount;
+        $this->title         = $title;
+        $this->postCount     = $postCount;
         $this->uniquePosters = $uniquePosters;
 
-        foreach ($threads as $thread) {
-            $this->threads[] = new Threads($thread);
-        }
+        $this->setYhreads($threads);
 
     }
 
@@ -65,5 +62,12 @@ class Thread implements Countable
     public function getThreads(): array
     {
         return $this->threads;
+    }
+
+    private function setYhreads(array $threads): void
+    {
+        foreach ($threads as $thread) {
+            $this->threads[] = new Threads($thread);
+        }
     }
 }
