@@ -77,7 +77,7 @@ class Phpach
     {
         $response = $this->httpClient->request(Request::METHOD_GET, sprintf(self::URL_THREAD_VIEW, $boardId, $threadId))->toArray();
 
-        return new Thread($response['title'], $response['posts_count'], $response['unique_posters'], $response['threads']);
+        return new Thread($response);
     }
 
     public function getPost(string $boardId, int $postId): Post
