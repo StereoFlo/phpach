@@ -3,6 +3,7 @@
 namespace Phpach;
 
 use Phpach\Boards\Category;
+use Phpach\Thread\Post;
 use Phpach\Thread\Thread;
 use Phpach\Threads\Board;
 use Symfony\Component\HttpClient\HttpClient;
@@ -16,9 +17,10 @@ use function sprintf;
 
 class Phpach
 {
-    public const URL_ALL_BOARDS = 'https://2ch.hk/makaba/mobile.fcgi?task=get_boards';
+    public const URL_ALL_BOARDS       = 'https://2ch.hk/makaba/mobile.fcgi?task=get_boards';
+    public const URL_ALL_POST         = 'https://2ch.hk/makaba/mobile.fcgi?task=get_post&board=%s&post=%d';
     public const URL_THREADS_IN_BOARD = 'https://2ch.hk/%s/threads.json';
-    public const URL_THREAD_VIEW = 'https://2ch.hk/%s/res/%d.json';
+    public const URL_THREAD_VIEW      = 'https://2ch.hk/%s/res/%d.json';
 
     /**
      * @var HttpClient
@@ -60,6 +62,7 @@ class Phpach
     public function getAllThreadsInBoard(string $boardId): Board
     {
         $response = $this->httpClient->request(Request::METHOD_GET, sprintf(self::URL_THREADS_IN_BOARD, $boardId))->toArray();
+
         return new Board($response['board'], $response['threads']);
     }
 
@@ -73,6 +76,14 @@ class Phpach
     public function getThread(string $boardId, int $threadId): Thread
     {
         $response = $this->httpClient->request(Request::METHOD_GET, sprintf(self::URL_THREAD_VIEW, $boardId, $threadId))->toArray();
+
         return new Thread($response['title'], $response['posts_count'], $response['unique_posters'], $response['threads']);
+    }
+
+    public function getPost(string $boardId, int $postId): Post
+    {
+        $response = $this->httpClient->request(Request::METHOD_GET, sprintf(self::URL_ALL_POST, $boardId, $postId))->toArray();
+
+        return new Post($response);
     }
 }
