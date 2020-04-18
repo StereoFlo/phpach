@@ -9,6 +9,11 @@ class Thread implements Countable
     /**
      * @var string
      */
+    private $boardId;
+
+    /**
+     * @var string
+     */
     private $title;
 
     /**
@@ -26,13 +31,26 @@ class Thread implements Countable
      */
     private $threads = [];
 
-    public function __construct(string $title, int $postCount, int $uniquePosters, array $threads)
-    {
-        $this->title         = $title;
-        $this->postCount     = $postCount;
-        $this->uniquePosters = $uniquePosters;
+    /**
+     * @var string
+     */
+    private $boardInfo;
 
-        $this->setYhreads($threads);
+    /**
+     * @var string
+     */
+    private $boardName;
+
+    public function __construct(array $thread)
+    {
+        $this->boardId       = $thread['Board'];
+        $this->boardInfo     = $thread['BoardInfo'];
+        $this->boardName     = $thread['BoardName'];
+        $this->title         = $thread['title'];
+        $this->postCount     = $thread['posts_count'];
+        $this->uniquePosters = $thread['unique_posters'];
+
+        $this->setThreads($thread['threads']);
 
     }
 
@@ -64,7 +82,22 @@ class Thread implements Countable
         return $this->threads;
     }
 
-    private function setYhreads(array $threads): void
+    public function getBoardId(): string
+    {
+        return $this->boardId;
+    }
+
+    public function getBoardInfo(): string
+    {
+        return $this->boardInfo;
+    }
+
+    public function getBoardName(): string
+    {
+        return $this->boardName;
+    }
+
+    private function setThreads(array $threads): void
     {
         foreach ($threads as $thread) {
             $this->threads[] = new Threads($thread);

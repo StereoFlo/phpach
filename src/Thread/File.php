@@ -34,14 +34,20 @@ class File
      */
     private $thumbnail;
 
+    /**
+     * @var int|null
+     */
+    private $type;
+
     public function __construct(array $file)
     {
         $this->displayName = (string) $file['displayname'] ?? null;
-        $this->height = (int) $file['height'] ?? null;
-        $this->width = (int) $file['width'] ?? null;
-        $this->size = (int) $file['size'] ?? null;
-        $this->path = (string) $file['path'] ?? null;
-        $this->thumbnail = (string) $file['thumbnail'] ?? null;
+        $this->height      = (int) $file['height'] ?? null;
+        $this->width       = (int) $file['width'] ?? null;
+        $this->size        = (int) $file['size'] ?? null;
+        $this->path        = (string) $file['path'] ?? null;
+        $this->thumbnail   = (string) $file['thumbnail'] ?? null;
+        $this->type        = (int) $file['type'] ?? null;
     }
 
     /**
