@@ -53,8 +53,12 @@ class Thread implements Countable
         $this->boardInfo     = $thread['BoardInfo'];
         $this->boardName     = $thread['BoardName'];
         $this->title         = $thread['title'];
-        $this->postCount     = $thread['posts_count'];
-        $this->uniquePosters = $thread['unique_posters'];
+        if (isset($thread['posts_count'])) {
+            $this->uniquePosters = (int) $thread['posts_count'];
+        }
+        if (isset($thread['unique_posters'])) {
+            $this->uniquePosters = (int) $thread['unique_posters'];
+        }
 
         $this->setThreads($thread['threads']);
     }
