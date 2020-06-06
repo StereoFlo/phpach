@@ -91,20 +91,42 @@ class Post
      */
     public function __construct(array $post)
     {
+        if (isset($post['lasthit'])) {
+            $this->lasthit = (int) $post['lasthit'];
+        }
+        if (isset($post['banned'])) {
+            $this->banned = (int) $post['banned'];
+        }
+        if (isset($post['closed'])) {
+            $this->closed = (int) $post['closed'];
+        }
+        if (isset($post['num'])) {
+            $this->num = (int) $post['num'];
+        }
+        if (isset($post['number'])) {
+            $this->number = (int) $post['number'];
+        }
+        if (isset($post['parent'])) {
+            $this->parent = (int) $post['parent'];
+        }
+        if (isset($post['sticky'])) {
+            $this->sticky = (int) $post['sticky'];
+        }
+        if (isset($post['op'])) {
+            $this->op = (int) $post['op'];
+        }
+        if (isset($post['op'])) {
+            $this->op = (int) $post['op'];
+        }
+        if (isset($post['timestamp'])) {
+            $this->timestamp = (int) $post['timestamp'];
+        }
+
         $this->name      = $post['name'] ?? null;
-        $this->banned    = $post['banned'] ?? null;
-        $this->closed    = $post['closed'] ?? null;
         $this->comment   = $post['comment'] ?? null;
         $this->date      = $post['date'] ?? null;
-        $this->lasthit   = $post['lasthit'] ?? null;
-        $this->num       = $post['num'] ?? null;
-        $this->number    = $post['number'] ?? null;
-        $this->op        = $post['op'] ?? null;
-        $this->parent    = $post['parent'] ?? null;
-        $this->sticky    = $post['sticky'] ?? null;
         $this->subject   = $post['subject'] ?? null;
         $this->tags      = $post['tags'] ?? null;
-        $this->timestamp = $post['timestamp'] ?? null;
         $this->trip      = $post['trip'] ?? null;
         $this->setFiles($post['files'] ?? null);
     }
