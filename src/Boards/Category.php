@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Phpach\Boards;
 
 use Countable;
@@ -17,6 +19,9 @@ class Category implements Countable
      */
     private $boards = [];
 
+    /**
+     * @param array<string, mixed> $boards
+     */
     public function __construct(string $name, array $boards)
     {
         $this->name = $name;
@@ -42,6 +47,9 @@ class Category implements Countable
         return $this->boards;
     }
 
+    /**
+     * @param array<string, mixed> $boards
+     */
     private function setBoards(array $boards): void
     {
         foreach ($boards as $thread) {

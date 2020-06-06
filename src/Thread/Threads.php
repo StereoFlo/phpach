@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Phpach\Thread;
 
 use Countable;
+use function count;
 
 class Threads implements Countable
 {
@@ -11,15 +14,15 @@ class Threads implements Countable
      */
     private $posts = [];
 
+    /**
+     * @param array<string, mixed> $posts
+     */
     public function __construct(array $posts)
     {
         $this->setPosts($posts['posts']);
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function count()
+    public function count(): int
     {
         return count($this->posts);
     }
@@ -33,7 +36,7 @@ class Threads implements Countable
     }
 
     /**
-     * @param array $posts
+     * @param array<string, mixed> $posts
      */
     private function setPosts(array $posts): void
     {

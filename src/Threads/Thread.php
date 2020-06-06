@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Phpach\Threads;
 
 class Thread
@@ -44,16 +46,19 @@ class Thread
      */
     private $views;
 
+    /**
+     * @param array<string, mixed> $thread
+     */
     public function __construct(array $thread)
     {
-        $this->comment = $thread['comment'] ?? null;
-        $this->lasthit = $thread['lasthit'] ?? null;
-        $this->num = $thread['num'] ?? null;
+        $this->comment    = $thread['comment'] ?? null;
+        $this->lasthit    = $thread['lasthit'] ?? null;
+        $this->num        = $thread['num'] ?? null;
         $this->postsCount = $thread['posts_count'] ?? null;
-        $this->score = $thread['score'] ?? null;
-        $this->subject = $thread['subject'] ?? null;
-        $this->timestamp = $thread['timestamp'] ?? null;
-        $this->views = $thread['views'] ?? null;
+        $this->score      = $thread['score'] ?? null;
+        $this->subject    = $thread['subject'] ?? null;
+        $this->timestamp  = $thread['timestamp'] ?? null;
+        $this->views      = $thread['views'] ?? null;
     }
 
     public function getComment(): ?string

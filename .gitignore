@@ -2,3 +2,4 @@
 vendor
 composer.phar
 test.php
+.php_cs.cache

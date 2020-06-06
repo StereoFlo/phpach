@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Phpach\Thread;
 
 class Post
@@ -79,23 +81,31 @@ class Post
      */
     private $files;
 
+    /**
+     * @var int|null
+     */
+    private $op;
+
+    /**
+     * @param array<string, mixed> $post
+     */
     public function __construct(array $post)
     {
-        $this->name = $post['name'] ?? null;
-        $this->banned = $post['banned'] ?? null;
-        $this->closed = $post['closed'] ?? null;
-        $this->comment = $post['comment'] ?? null;
-        $this->date = $post['date'] ?? null;
-        $this->lasthit = $post['lasthit'] ?? null;
-        $this->num = $post['num'] ?? null;
-        $this->number = $post['number'] ?? null;
-        $this->op = $post['op'] ?? null;
-        $this->parent = $post['parent'] ?? null;
-        $this->sticky = $post['sticky'] ?? null;
-        $this->subject = $post['subject'] ?? null;
-        $this->tags = $post['tags'] ?? null;
+        $this->name      = $post['name'] ?? null;
+        $this->banned    = $post['banned'] ?? null;
+        $this->closed    = $post['closed'] ?? null;
+        $this->comment   = $post['comment'] ?? null;
+        $this->date      = $post['date'] ?? null;
+        $this->lasthit   = $post['lasthit'] ?? null;
+        $this->num       = $post['num'] ?? null;
+        $this->number    = $post['number'] ?? null;
+        $this->op        = $post['op'] ?? null;
+        $this->parent    = $post['parent'] ?? null;
+        $this->sticky    = $post['sticky'] ?? null;
+        $this->subject   = $post['subject'] ?? null;
+        $this->tags      = $post['tags'] ?? null;
         $this->timestamp = $post['timestamp'] ?? null;
-        $this->trip = $post['trip'] ?? null;
+        $this->trip      = $post['trip'] ?? null;
         $this->setFiles($post['files'] ?? null);
     }
 
@@ -177,9 +187,12 @@ class Post
         return $this->files;
     }
 
+    /**
+     * @param array<string, mixed>|null $files
+     */
     private function setFiles(?array $files): void
     {
-        if ($files) {
+        if (null !== $files) {
             foreach ($files as $file) {
                 $this->files[] = new File($file);
             }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Phpach\Thread;
 
 class File
@@ -39,60 +41,59 @@ class File
      */
     private $type;
 
+    /**
+     * @param array<string, mixed> $file
+     */
     public function __construct(array $file)
     {
-        $this->displayName = (string) $file['displayname'] ?? null;
-        $this->height      = (int) $file['height'] ?? null;
-        $this->width       = (int) $file['width'] ?? null;
-        $this->size        = (int) $file['size'] ?? null;
-        $this->path        = (string) $file['path'] ?? null;
-        $this->thumbnail   = (string) $file['thumbnail'] ?? null;
-        $this->type        = (int) $file['type'] ?? null;
+        if (isset($file['displayname'])) {
+            $this->displayName = (string) $file['displayname'];
+        }
+        if (isset($file['height'])) {
+            $this->height = (int) $file['height'];
+        }
+        if (isset($file['width'])) {
+            $this->width = (int) $file['width'];
+        }
+        if (isset($file['size'])) {
+            $this->size = (int) $file['size'];
+        }
+        if (isset($file['path'])) {
+            $this->path = (string) $file['path'];
+        }
+        if (isset($file['thumbnail'])) {
+            $this->thumbnail = (string) $file['thumbnail'];
+        }
+        if (isset($file['type'])) {
+            $this->type = (int) $file['type'];
+        }
     }
 
-    /**
-     * @return string
-     */
     public function getDisplayName(): string
     {
         return $this->displayName;
     }
 
-    /**
-     * @return int|null
-     */
     public function getHeight(): ?int
     {
         return $this->height;
     }
 
-    /**
-     * @return int|null
-     */
     public function getWidth(): ?int
     {
         return $this->width;
     }
 
-    /**
-     * @return int|null
-     */
     public function getSize(): ?int
     {
         return $this->size;
     }
 
-    /**
-     * @return string|null
-     */
     public function getPath(): ?string
     {
         return $this->path;
     }
 
-    /**
-     * @return string|null
-     */
     public function getThumbnail(): ?string
     {
         return $this->thumbnail;

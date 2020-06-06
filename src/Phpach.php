@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Phpach;
 
 use Phpach\Boards\Category;
@@ -13,6 +15,7 @@ use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 use function sprintf;
 
 class Phpach
@@ -23,7 +26,7 @@ class Phpach
     public const URL_THREAD_VIEW      = 'https://2ch.hk/%s/res/%d.json';
 
     /**
-     * @var HttpClient
+     * @var HttpClientInterface
      */
     private $httpClient;
 
@@ -33,18 +36,18 @@ class Phpach
     }
 
     /**
-     * @return Category[]
-     *
      * @throws ClientExceptionInterface
      * @throws DecodingExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
+     *
+     * @return Category[]
      */
     public function getAllBoards(): array
     {
         $response = $this->httpClient->request(Request::METHOD_GET, self::URL_ALL_BOARDS)->toArray();
-        $res = [];
+        $res      = [];
         foreach ($response as $name => $threads) {
             $res[] = new Category($name, $threads);
         }

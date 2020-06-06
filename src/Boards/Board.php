@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Phpach\Boards;
 
 class Board
@@ -19,32 +21,26 @@ class Board
      */
     private $id;
 
+    /**
+     * @param array<string, mixed> $settings
+     */
     public function __construct(array $settings)
     {
-        $this->name = $settings['name'] ?? null;
+        $this->name     = $settings['name'] ?? null;
         $this->category = $settings['category'] ?? null;
-        $this->id = $settings['id'] ?? null;
+        $this->id       = $settings['id'] ?? null;
     }
 
-    /**
-     * @return string|null
-     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
-    /**
-     * @return string|null
-     */
     public function getCategory(): ?string
     {
         return $this->category;
     }
 
-    /**
-     * @return string|null
-     */
     public function getId(): ?string
     {
         return $this->id;

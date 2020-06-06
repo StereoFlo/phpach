@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Phpach\Threads;
 
 use Countable;
+use function count;
 
 class Board implements Countable
 {
@@ -16,6 +19,9 @@ class Board implements Countable
      */
     private $threads = [];
 
+    /**
+     * @param array<string, mixed> $threads
+     */
     public function __construct(string $id, array $threads)
     {
         $this->id = $id;
@@ -32,11 +38,17 @@ class Board implements Countable
         return $this->id;
     }
 
+    /**
+     * @return Thread[]
+     */
     public function getThreads(): array
     {
         return $this->threads;
     }
 
+    /**
+     * @param array<string, mixed> $threads
+     */
     private function setThreads(array $threads): void
     {
         foreach ($threads as $thread) {
