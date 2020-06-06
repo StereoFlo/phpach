@@ -54,7 +54,7 @@ class Thread implements Countable
         $this->boardName     = $thread['BoardName'];
         $this->title         = $thread['title'];
         if (isset($thread['posts_count'])) {
-            $this->uniquePosters = (int) $thread['posts_count'];
+            $this->postCount = (int) $thread['posts_count'];
         }
         if (isset($thread['unique_posters'])) {
             $this->uniquePosters = (int) $thread['unique_posters'];
