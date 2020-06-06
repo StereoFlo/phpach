@@ -70,8 +70,8 @@ class Thread
             $this->timestamp = (int) $thread['timestamp'];
         }
 
-        $this->comment    = $thread['comment'] ?? null;
-        $this->subject    = $thread['subject'] ?? null;
+        $this->comment = $thread['comment'] ?? null;
+        $this->subject = $thread['subject'] ?? null;
     }
 
     public function getComment(): ?string
