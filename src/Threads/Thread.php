@@ -51,14 +51,27 @@ class Thread
      */
     public function __construct(array $thread)
     {
+        if (isset($thread['lasthit'])) {
+            $this->lasthit = (int) $thread['lasthit'];
+        }
+        if (isset($thread['num'])) {
+            $this->num = (int) $thread['num'];
+        }
+        if (isset($thread['posts_count'])) {
+            $this->postsCount = (int) $thread['posts_count'];
+        }
+        if (isset($thread['score'])) {
+            $this->score = (float) $thread['score'];
+        }
+        if (isset($thread['views'])) {
+            $this->views  = (int) $thread['views'];
+        }
+        if (isset($thread['timestamp'])) {
+            $this->timestamp = (int) $thread['timestamp'];
+        }
+
         $this->comment    = $thread['comment'] ?? null;
-        $this->lasthit    = $thread['lasthit'] ?? null;
-        $this->num        = $thread['num'] ?? null;
-        $this->postsCount = $thread['posts_count'] ?? null;
-        $this->score      = $thread['score'] ?? null;
         $this->subject    = $thread['subject'] ?? null;
-        $this->timestamp  = $thread['timestamp'] ?? null;
-        $this->views      = $thread['views'] ?? null;
     }
 
     public function getComment(): ?string
