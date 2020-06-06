@@ -4,89 +4,118 @@ declare(strict_types = 1);
 
 namespace Phpach;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
+use League\Container\Exception\NotFoundException;
 use Phpach\Boards\Category;
 use Phpach\Thread\Post;
 use Phpach\Thread\Thread;
 use Phpach\Threads\Board;
-use Symfony\Component\HttpClient\HttpClient;
+use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Component\HttpFoundation\Response;
+use function json_decode;
 use function sprintf;
+use function str_replace;
 
 class Phpach
 {
-    public const URL_ALL_BOARDS       = 'https://2ch.hk/makaba/mobile.fcgi?task=get_boards';
-    public const URL_ALL_POST         = 'https://2ch.hk/makaba/mobile.fcgi?task=get_post&board=%s&post=%d';
-    public const URL_THREADS_IN_BOARD = 'https://2ch.hk/%s/threads.json';
-    public const URL_THREAD_VIEW      = 'https://2ch.hk/%s/res/%d.json';
+    public const URL_MAIN             = 'https://2ch.hk';
+    public const URL_ALL_BOARDS       = self::URL_MAIN . '/makaba/mobile.fcgi?task=get_boards';
+    public const URL_ALL_POST         = self::URL_MAIN . '/makaba/mobile.fcgi?task=get_post&board=%s&post=%d';
+    public const URL_THREADS_IN_BOARD = self::URL_MAIN . '/%s/threads.json';
+    public const URL_THREAD_VIEW      = self::URL_MAIN . '/%s/res/%d.%s';
+
+    public const FORMAT_JSON = 'json';
+    public const FORMAT_HTML = 'html';
 
     /**
-     * @var HttpClientInterface
+     * @var Client
      */
     private $httpClient;
 
     public function __construct()
     {
-        $this->httpClient = HttpClient::create();
+        $this->httpClient = new Client();
     }
 
     /**
-     * @throws ClientExceptionInterface
-     * @throws DecodingExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws TransportExceptionInterface
-     *
      * @return Category[]
      */
     public function getAllBoards(): array
     {
-        $response = $this->httpClient->request(Request::METHOD_GET, self::URL_ALL_BOARDS)->toArray();
+        $response = $this->httpClient->request(Request::METHOD_GET, self::URL_ALL_BOARDS);
         $res      = [];
-        foreach ($response as $name => $threads) {
+        foreach ($this->getArrayFromBody($response) as $name => $threads) {
             $res[] = new Category($name, $threads);
         }
 
         return $res;
     }
 
-    /**
-     * @throws ClientExceptionInterface
-     * @throws DecodingExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws TransportExceptionInterface
-     */
     public function getAllThreadsInBoard(string $boardId): Board
     {
-        $response = $this->httpClient->request(Request::METHOD_GET, sprintf(self::URL_THREADS_IN_BOARD, $boardId))->toArray();
+        $response = $this->httpClient->request(Request::METHOD_GET, sprintf(self::URL_THREADS_IN_BOARD, $boardId));
+        $response = $this->getArrayFromBody($response);
 
         return new Board($response['board'], $response['threads']);
     }
 
-    /**
-     * @throws ClientExceptionInterface
-     * @throws DecodingExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws TransportExceptionInterface
-     */
     public function getThread(string $boardId, int $threadId): Thread
     {
-        $response = $this->httpClient->request(Request::METHOD_GET, sprintf(self::URL_THREAD_VIEW, $boardId, $threadId))->toArray();
+        try {
+            $response = $this->httpClient->request(Request::METHOD_GET, sprintf(self::URL_THREAD_VIEW, $boardId, $threadId, self::FORMAT_JSON));
+        } catch (ClientException $exception) {
+            if (Response::HTTP_NOT_FOUND !== $exception->getCode()) {
+                throw $exception;
+            }
 
-        return new Thread($response);
+            $response = $this->httpClient->request(Request::METHOD_GET, sprintf(self::URL_THREAD_VIEW, $boardId, $threadId, self::FORMAT_HTML), [
+                'allow_redirects' => false,
+            ]);
+
+            if (Response::HTTP_MOVED_PERMANENTLY !== $response->getStatusCode()) {
+                throw $exception;
+            }
+
+            $headers = $response->getHeaders();
+            if (!isset($headers['Location'][0])) {
+                throw new NotFoundException('location is not specified');
+            }
+
+            try {
+                $response = $this->httpClient->request(Request::METHOD_GET, $headers['Location'][0], [
+                    'allow_redirects' => false,
+                ]);
+
+                if (Response::HTTP_FOUND === $response->getStatusCode()) {
+                    $headers = $response->getHeaders();
+                    if (!isset($headers['Location'][0])) {
+                        throw new NotFoundException('location is not specified');
+                    }
+                    $loc      = self::URL_MAIN . str_replace('.html', '.json', $headers['Location'][0]);
+                    $response = $this->httpClient->request(Request::METHOD_GET, $loc);
+                }
+            } catch (ClientException $exception) {
+                throw $exception;
+            }
+        }
+
+        return new Thread($this->getArrayFromBody($response));
     }
 
     public function getPost(string $boardId, int $postId): Post
     {
-        $response = $this->httpClient->request(Request::METHOD_GET, sprintf(self::URL_ALL_POST, $boardId, $postId))->toArray();
+        $response = $this->httpClient->request(Request::METHOD_GET, sprintf(self::URL_ALL_POST, $boardId, $postId));
 
-        return new Post($response);
+        return new Post($this->getArrayFromBody($response));
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function getArrayFromBody(ResponseInterface $response): array
+    {
+        return json_decode($response->getBody()->getContents(), true);
     }
 }

@@ -5,7 +5,9 @@
     "license": "MIT",
     "require": {
         "symfony/http-client": "^4.4|^5.0",
-        "symfony/http-foundation": "^5.0"
+        "symfony/http-foundation": "^5.0",
+        "guzzlehttp/guzzle": "^6.5",
+      "ext-json": "*"
     },
     "autoload": {
         "psr-4": {
