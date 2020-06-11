@@ -47,7 +47,7 @@ class Phpach
         $response = $this->httpClient->request(Request::METHOD_GET, self::URL_ALL_BOARDS);
         $res      = [];
         foreach ($this->getArrayFromBody($response) as $name => $threads) {
-            $res[] = new Category($name, $threads);;
+            $res[] = new Category($name, $threads);
         }
 
         return $res;
